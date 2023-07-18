@@ -1,0 +1,9 @@
+{+echo 2+2}
+
+{&google weather}
+{&npm react}
+{&cargo serde}
+
+{! https://google.com} Prompt
+
+{https://google.com}
