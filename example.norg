@@ -5,3 +5,5 @@
 {&cargo serde}
 
 {! https://google.com} Prompt
+
+{&caniuse flexbox}

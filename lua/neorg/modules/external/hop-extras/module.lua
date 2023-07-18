@@ -23,8 +23,7 @@ module.load = function()
   module.required['core.keybinds'].register_keybind(namespace, EVENT_HOP_LINK)
 end
 
-module.private = {
-}
+module.private = { }
 
 module.public = {
   follow_link = function(node, split, link)
@@ -39,7 +38,7 @@ module.public = {
           return true
         end
 
-        -- Search apis
+        -- Search
         if link.link_location_text:match("^&%w+%s.+") then
           vim.print("Shorthand :: " .. link.link_location_text)
           return true
@@ -50,7 +49,7 @@ module.public = {
           link.link_location_text = link.link_location_text:gsub("^!%s*", "")
 
           if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") then
-            module.required['core.esupports.hop'].follow_link(node, split, link)
+            module.public.follow_link(node, split, link) -- rec
           end
           return true
         end
@@ -77,8 +76,11 @@ module.on_event = function(event)
   if event_name == namespace .. '.' .. EVENT_HOP_LINK then
     local split = event.content[1]
     local node = module.required['core.esupports.hop'].extract_link_node()
-    local link = module.required['core.esupports.hop'].parse_link(node, bufnr)
-    module.public.follow_link(node, split, link)
+
+    if node then
+      local link = module.required['core.esupports.hop'].parse_link(node, bufnr)
+      module.public.follow_link(node, split, link)
+    end
   end
 end
 
