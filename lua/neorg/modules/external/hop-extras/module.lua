@@ -32,19 +32,26 @@ module.public = {
 
     function follow()
       if link.link_type == "url" then
+        -- Command links
         if link.link_location_text:match("^%+.+") then
           local cmd = link.link_location_text:gsub("^%+", "")
           vim.cmd(cmd)
           return true
         end
 
-        if link.link_location_text:match("^%&%w+%s.+") then
+        -- Search apis
+        if link.link_location_text:match("^&%w+%s.+") then
           vim.print("Shorthand :: " .. link.link_location_text)
           return true
         end
 
-        if link.link_location_text:match("^%!.+") then
-          vim.print("Prompt :: " .. link.link_location_text)
+        -- Prompt for external links
+        if link.link_location_text:match("^!.+") then
+          link.link_location_text = link.link_location_text:gsub("^!%s*", "")
+
+          if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") then
+            module.required['core.esupports.hop'].follow_link(node, split, link)
+          end
           return true
         end
       end
