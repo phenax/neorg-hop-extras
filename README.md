@@ -1,4 +1,4 @@
-# neorg-hop-extras
+# neorg-hop-extras [WIP]
 Neorg plugin to extend the functionality of links
 
 
