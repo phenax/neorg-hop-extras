@@ -13,23 +13,10 @@ add_rtp('neorg')
 
 ---
 
-function neorg_keybindings(keybinds)
-  keybinds.map_event_to_mode("norg", {
-    n = {
-      { "<CR>", "external.hop-extras.hop-link", opts = { desc = "Follow link" } },
-    }
-  }, { silent = true, noremap = true })
-end
-
 require('neorg').setup {
   load = {
     ['core.defaults'] = {},
     ['external.hop-extras'] = {},
-    ['core.keybinds'] = {
-      config = {
-        hook = neorg_keybindings,
-      }
-    },
   },
 }
 

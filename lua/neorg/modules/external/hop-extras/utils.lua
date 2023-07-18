@@ -7,7 +7,7 @@ end
 
 function utils.split_string(input, sep)
   local result = {}
-  local pattern = "([^" .. sep .. "]+)"
+  local pattern = '([^' .. sep .. ']+)'
   for substring in string.gmatch(input, pattern) do
     table.insert(result, substring)
   end

@@ -21,24 +21,31 @@ Neorg plugin to extend the functionality of links
 ```lua
 require('neorg').setup {
   load = {
-    -- ...
     ['external.hop-extras'] = {},
+  },
+}
+```
+
+#### Custom keybinding
+```lua
+require('neorg').setup {
+  load = {
+    -- ...
+    ['external.hop-extras'] = {
+      config = {
+        bind_enter_key = false,
+      }
+    },
     ['core.keybinds'] = {
       config = {
-        hook = neorg_keybindings,
+        hook = function(keybinds)
+          -- Use `external.hop-extras.hop-link` instead of `core.esupports.hop.hop-link`
+          keybinds.remap_event('norg', 'n', '<leader>gl', 'external.hop-extras.hop-link')
+        end,
       }
     },
   },
 }
-
-function neorg_keybindings(keybinds)
-  -- Use `external.hop-extras.hop-link` instead of `core.esupports.hop.hop-link`
-  keybinds.map_event_to_mode("norg", {
-    n = {
-      { "<CR>", "external.hop-extras.hop-link", opts = { desc = "Follow link" } },
-    }
-  }, { silent = true, noremap = true })
-end
 ```
 
 
@@ -50,7 +57,7 @@ Run an arbitrary vim command when a link is activated
 ```neorg
 - Increment counter {+norm! t]}[Count: 19] - increments the count every time the link is activated
 - View yesterday's journal {+Neorg journal yesterday}[Yesterday] - Opens yesterday's journal
-- Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires [phenax/neorg-timelog](https://github.com/phenax/neorg-timelog))
+- Log the time using timelog module {+Neorg timelog insert routine}[Log routine] (requires https://github.com/phenax/neorg-timelog)
 ```
 
 #### Aliases for links
@@ -88,5 +95,4 @@ Ask for confirmation (uses `vim.fn.confirm`) before activating a link
   - Confirm before opening alias - {! &npm react}
   - Confirm before running command {! +norm! t]}[16]
 ```
-
 

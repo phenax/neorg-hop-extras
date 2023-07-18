@@ -1,7 +1,7 @@
 * Commands
   - Run vim commands {+echo 42+27}
   - Run shell commands {+!ls}
-  - Increment counter {+norm! t]}[Count: 19]
+  - Increment counter {+norm! t]}[Count: 23]
   - View yesterday's journal {+Neorg journal yesterday}[Yesterday]
   - Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires {&gh phenax/neorg-timelog})
 
