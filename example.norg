@@ -1,9 +1,12 @@
 {+echo 2+2}
+{! +!ls}
 
-{&google weather}
+{&gh phenax/neorg-hop-extras}
+{&gh phenax/neorg-timelog}
 {&npm react}
-{&cargo serde}
+{&crates serde}
+{&caniuse flexbox}
+{&caniuse flexbox}
 
 {! https://google.com} Prompt
-
-{&caniuse flexbox}
+{!&npm react} Prompt

@@ -14,5 +14,18 @@ function utils.split_string(input, sep)
   return result
 end
 
+function utils.cons(tbl)
+  if #tbl == 0 then return nil, {} end
+
+  local tl = {}
+  for i, x in pairs(tbl) do
+    if i > 1 then
+      table.insert(tl, x)
+    end
+  end
+  return tbl[1], tl
+end
+
+
 return utils
 

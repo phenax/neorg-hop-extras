@@ -7,7 +7,17 @@ local EVENT_HOP_LINK = 'hop-link'
 
 local module = neorg.modules.create(namespace)
 
-module.config.public = {}
+module.config.public = {
+  aliases = {
+    gh = "https://github.com/{}",
+    npm = "https://www.npmjs.com/package/{}",
+    crates = "https://crates.io/crates/{}",
+    pub = "https://pub.dev/packages/{}",
+    caniuse = "https://caniuse.com/#search={}",
+    bundlephobia = "https://bundlephobia.com/result?p={}",
+    reddit = "http://www.reddit.com/r/{}/",
+  },
+}
 
 module.setup = function()
   return {
@@ -27,41 +37,43 @@ module.private = { }
 
 module.public = {
   follow_link = function(node, split, link)
-    print(vim.inspect(link))
+    -- print(vim.inspect(link))
 
-    function follow()
-      if link.link_type == "url" then
-        -- Command links
-        if link.link_location_text:match("^%+.+") then
-          local cmd = link.link_location_text:gsub("^%+", "")
-          vim.cmd(cmd)
-          return true
-        end
-
-        -- Search
-        if link.link_location_text:match("^&%w+%s.+") then
-          vim.print("Shorthand :: " .. link.link_location_text)
-          return true
-        end
-
-        -- Prompt for external links
-        if link.link_location_text:match("^!.+") then
-          link.link_location_text = link.link_location_text:gsub("^!%s*", "")
-
-          if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") then
-            module.public.follow_link(node, split, link) -- rec
-          end
-          return true
-        end
+    if link.link_type == "url" then
+      -- Command links
+      if link.link_location_text:match("^%+.+") then
+        local cmd = link.link_location_text:gsub("^%+", "")
+        vim.cmd(cmd)
+        return
       end
 
-      return false
+      -- Aliases
+      if link.link_location_text:match("^&%w+%s.+") then
+        local alias_key, value = utils.cons(utils.split_string(link.link_location_text:gsub("^&", ""), " "))
+        value = table.concat(value, " ")
+
+        local alias = module.config.public.aliases[alias_key]
+        if alias then
+          link.link_location_text = alias:gsub("{}", value)
+          module.required['core.esupports.hop'].follow_link(node, split, link)
+        end
+
+        return
+      end
+
+      -- Prompt for links
+      if link.link_location_text:match("^!.+") then
+        link.link_location_text = link.link_location_text:gsub("^!%s*", "")
+
+        -- TODO: Support internal link type {! :somefile:}
+        if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") then
+          module.public.follow_link(node, split, link) -- rec
+        end
+        return
+      end
     end
 
-    local link_followed = follow()
-    if not link_followed then
-      module.required['core.esupports.hop'].follow_link(node, split, link)
-    end
+    module.required['core.esupports.hop'].follow_link(node, split, link)
   end,
 
   -- TODO: Custom treesitter nodes
