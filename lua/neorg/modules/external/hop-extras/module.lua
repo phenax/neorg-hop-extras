@@ -7,16 +7,18 @@ local EVENT_HOP_LINK = 'hop-link'
 
 local module = neorg.modules.create(namespace)
 
+local defaultAliases = {
+  gh = "https://github.com/{}",
+  npm = "https://www.npmjs.com/package/{}",
+  crates = "https://crates.io/crates/{}",
+  pub = "https://pub.dev/packages/{}",
+  caniuse = "https://caniuse.com/#search={}",
+  bundlephobia = "https://bundlephobia.com/result?p={}",
+  reddit = "http://www.reddit.com/r/{}/",
+}
+
 module.config.public = {
-  aliases = {
-    gh = "https://github.com/{}",
-    npm = "https://www.npmjs.com/package/{}",
-    crates = "https://crates.io/crates/{}",
-    pub = "https://pub.dev/packages/{}",
-    caniuse = "https://caniuse.com/#search={}",
-    bundlephobia = "https://bundlephobia.com/result?p={}",
-    reddit = "http://www.reddit.com/r/{}/",
-  },
+  aliases = {},
 }
 
 module.setup = function()
@@ -49,12 +51,14 @@ module.public = {
 
       -- Aliases
       if link.link_location_text:match("^&%w+%s.+") then
-        local alias_key, value = utils.cons(utils.split_string(link.link_location_text:gsub("^&", ""), " "))
+        local link_location = link.link_location_text:gsub("^&", "")
+        local alias_key, value = utils.cons(utils.split_string(link_location, " "))
         value = table.concat(value, " ")
 
-        local alias = module.config.public.aliases[alias_key]
-        if alias then
-          link.link_location_text = alias:gsub("{}", value)
+        local aliases = vim.tbl_extend("force", defaultAliases, module.config.public.aliases)
+
+        if aliases[alias_key] then
+          link.link_location_text = aliases[alias_key]:gsub("{}", value)
           module.required['core.esupports.hop'].follow_link(node, split, link)
         end
 
@@ -66,7 +70,7 @@ module.public = {
         link.link_location_text = link.link_location_text:gsub("^!%s*", "")
 
         -- TODO: Support internal link type {! :somefile:}
-        if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") then
+        if vim.fn.confirm("Follow link " .. link.link_location_text .. "?") == 1 then
           module.public.follow_link(node, split, link) -- rec
         end
         return

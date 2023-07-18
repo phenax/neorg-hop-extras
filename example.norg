@@ -1,12 +1,18 @@
-{+echo 2+2}
-{! +!ls}
+* Commands
+  - Run vim commands {+echo 42+27}
+  - Run shell commands {+!ls}
+  - Increment counter {+norm! t]}[Count: 19]
+  - View yesterday's journal {+Neorg journal yesterday}[Yesterday]
+  - Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires {&gh phenax/neorg-timelog})
 
-{&gh phenax/neorg-hop-extras}
-{&gh phenax/neorg-timelog}
-{&npm react}
-{&crates serde}
-{&caniuse flexbox}
-{&caniuse flexbox}
+* Aliases
+  - {&gh phenax/neorg-hop-extras}
+  - {&gh phenax/neorg-timelog}
+  - {&npm react}
+  - {&crates serde}
+  - {&caniuse flexbox}
 
-{! https://google.com} Prompt
-{!&npm react} Prompt
+* With prompts
+  - {! https://google.com} - Prompt before opening link
+  - {!&npm react} - Prompt before opening alias
+  - {+norm! t]}[16] - Prompt before running command (increment)
