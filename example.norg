@@ -15,4 +15,4 @@
 * With prompts
   - {! https://google.com} - Prompt before opening link
   - {!&npm react} - Prompt before opening alias
-  - {+norm! t]}[16] - Prompt before running command (increment)
+  - {! +norm! t]}[16] - Prompt before running command (increment)

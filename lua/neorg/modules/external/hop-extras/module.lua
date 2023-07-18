@@ -44,8 +44,6 @@ module.load = function()
   end
 end
 
-module.private = { }
-
 module.public = {
   follow_link = function(node, split, link)
     -- print(vim.inspect(link))
@@ -88,10 +86,6 @@ module.public = {
 
     module.required['core.esupports.hop'].follow_link(node, split, link)
   end,
-
-  -- TODO: Custom treesitter nodes
-  -- parse_link = function(node, buf)
-  -- end,
 }
 
 module.on_event = function(event)
