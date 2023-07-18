@@ -1,5 +1,5 @@
 # neorg-hop-extras
-Neorg module for some additional types of links
+Neorg plugin to extend the functionality of links
 
 ## Install
 
