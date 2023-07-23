@@ -48,6 +48,11 @@ module.public = {
   follow_link = function(node, split, link)
     -- print(vim.inspect(link))
 
+    if not link then
+      module.required['core.esupports.hop'].follow_link(node, split, link)
+      return
+    end
+
     if link.link_type == 'url' then
       -- Command links
       if link.link_location_text:match('^%+.+') then
