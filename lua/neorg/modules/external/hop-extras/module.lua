@@ -55,7 +55,7 @@ module.public = {
       return
     end
 
-    if link.link_type == 'url' or not link.link_type then
+    if link.link_location_text then
       -- Command links
       if link.link_location_text:match('^%+.+') then
         local cmd = link.link_location_text:gsub('^%+', '')
