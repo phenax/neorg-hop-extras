@@ -1,9 +1,25 @@
-* Commands
+* Simple command examples
   - Run vim commands {+echo 42+27}
   - Run shell commands {+!ls}
-  - Increment counter {+norm! t]}[Count: 23]
   - View yesterday's journal {+Neorg journal yesterday}[Yesterday]
   - Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires {&gh phenax/neorg-timelog})
+
+* Counter example
+  - count: 22
+  - Increment: {+/-\s*count:/ | norm! }
+  - Decrement: {+/-\s*count:/ | norm! }
+
+* Shell insert example
+  - Update ls results: {+/lsResult\s*=/ | norm vi(dk:r!ls}
+  @code
+  lsResult = (
+example.lua
+example.norg
+LICENSE
+lua
+README.md
+  )
+  @end
 
 * Aliases
   - {&gh phenax/neorg-hop-extras}

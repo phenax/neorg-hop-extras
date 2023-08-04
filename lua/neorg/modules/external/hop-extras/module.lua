@@ -46,14 +46,16 @@ end
 
 module.public = {
   follow_link = function(node, split, link)
-    -- print(vim.inspect(link))
+    if vim.g.__neorg_hop_extras_debug then
+      print(vim.inspect(link))
+    end
 
     if not link then
       module.required['core.esupports.hop'].follow_link(node, split, link)
       return
     end
 
-    if link.link_type == 'url' then
+    if link.link_type == 'url' or not link.link_type then
       -- Command links
       if link.link_location_text:match('^%+.+') then
         local cmd = link.link_location_text:gsub('^%+', '')

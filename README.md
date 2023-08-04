@@ -55,9 +55,14 @@ require('neorg').setup {
 Run an arbitrary vim command when a link is activated
 
 ```neorg
-- Increment counter {+norm! t]}[Count: 19] - increments the count every time the link is activated
 - View yesterday's journal {+Neorg journal yesterday}[Yesterday] - Opens yesterday's journal
 - Log the time using timelog module {+Neorg timelog insert routine}[Log routine] (requires https://github.com/phenax/neorg-timelog)
+- Run shell commands {+!ls}
+
+* Counter example
+  - count: 28
+  - Increment: {+/-\s*count:/ | norm! }
+  - Decrement: {+/-\s*count:/ | norm! }
 ```
 
 #### Aliases for links
@@ -93,6 +98,6 @@ Ask for confirmation (uses `vim.fn.confirm`) before activating a link
 ```neorg
   - Asks for confirmation before opening external link - {! https://example.com}
   - Confirm before opening alias - {! &npm react}
-  - Confirm before running command {! +norm! t]}[16]
+  - Confirm before running command {! +echo "Dangerous commands need confirmation"}
 ```
 
