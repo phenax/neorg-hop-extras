@@ -5,7 +5,7 @@
   - Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires {&gh phenax/neorg-timelog})
 
 * Counter example
-  - count: 17
+  - count: 15
   - Increment: {+/-\s*count:/ | norm! }
   - Decrement: {+/-\s*count:/ | norm! }
 

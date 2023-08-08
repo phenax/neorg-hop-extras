@@ -1,4 +1,4 @@
-require('neorg.modules.base')
+local neorg = require('neorg.core')
 
 local utils = require('neorg.modules.external.hop-extras.utils')
 
