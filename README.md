@@ -61,8 +61,8 @@ Run an arbitrary vim command when a link is activated
 
 * Counter example
   - count: 28
-  - Increment: {+/-\s*count:/ | norm! }
-  - Decrement: {+/-\s*count:/ | norm! }
+  - Increment: {+/-\s*count:/ | call feedkeys("\<C-a>")}
+  - Decrement: {+/-\s*count:/ | call feedkeys("\<C-x>")}
 ```
 
 #### Aliases for links
