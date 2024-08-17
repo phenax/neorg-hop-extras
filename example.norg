@@ -5,20 +5,14 @@
   - Insert timelog into routine {+Neorg timelog insert routine}[Log routine] (requires {&gh phenax/neorg-timelog})
 
 * Counter example
-  - count: 15
+  - count: 19
   - Increment: {+/-\s*count:/ | norm! }
   - Decrement: {+/-\s*count:/ | norm! }
 
 * Shell insert example
-  - Update ls results: {+/lsResult\s*=/ | norm vi(dk:r!ls}
+  - Update ls results: {+/lsResult\s*=/ | norm vi(dk:r!ls}
   @code
   lsResult = (
-example.lua
-example.norg
-foo.norg
-LICENSE
-lua
-README.md
   )
   @end
 
@@ -33,7 +27,7 @@ $ with-prompts
 * With prompts
   - {! https://duckduckgo.com} - Prompt before opening link
   - {!&npm react} - Prompt before opening alias
-  - {! +norm! t]}[18] - Prompt before running command (increment)
+  - {! +norm! t]}[23] - Prompt before running command (increment)
 
 * Regular links
   - {https://duckduckgo.com}

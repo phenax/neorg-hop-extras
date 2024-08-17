@@ -3,7 +3,6 @@ local neorg = require('neorg.core')
 local utils = require('neorg.modules.external.hop-extras.utils')
 
 local namespace = 'external.hop-extras'
-local EVENT_HOP_LINK = 'hop-link'
 
 local module = neorg.modules.create(namespace)
 
@@ -26,25 +25,34 @@ module.setup = function()
   return {
     success = true,
     requires = {
-      'core.keybinds',
-      'core.keybinds.keybinds',
+      'core.integrations.treesitter',
+      'core.ui',
+      'core.dirman.utils',
+      'core.links',
       'core.esupports.hop',
     },
   }
 end
 
 module.load = function()
-  module.required['core.keybinds'].register_keybind(namespace, EVENT_HOP_LINK)
+  vim.keymap.set('', '<plug>(neorg.external.hop-extras.hop-link)', function() module.public.hop_link() end)
+  vim.keymap.set('', '<plug>(neorg.external.hop-extras.hop-link.vsplit)', function() module.public.hop_link('vsplit') end)
 
   -- Bind <cr> to hop links
   if module.config.public.bind_enter_key then
-    neorg.callbacks.on_event('core.keybinds.events.enable_keybinds', function(_, keybinds)
-      keybinds.remap_event('norg', 'n', '<CR>', 'external.hop-extras.hop-link')
-    end)
+    vim.keymap.set('n', '<CR>', '<plug>(neorg.external.hop-extras.hop-link)')
+    vim.keymap.set('n', '<M-CR>', '<plug>(neorg.external.hop-extras.hop-link.vsplit)')
   end
 end
 
 module.public = {
+  hop_link = function(split)
+    local hop_module = module.required['core.esupports.hop']
+    local link_node_at_cursor = hop_module.extract_link_node()
+    local parsed_link = hop_module.parse_link(link_node_at_cursor)
+    module.public.follow_link(link_node_at_cursor, split, parsed_link)
+  end,
+
   follow_link = function(node, split, link)
     if vim.g.__neorg_hop_extras_debug then
       print(vim.inspect(link))
@@ -66,8 +74,8 @@ module.public = {
       -- Aliases
       if link.link_location_text:match('^&%w+%s.+') then
         local link_location = link.link_location_text:gsub('^&', '')
-        local alias_key, value = utils.cons(utils.split_string(link_location, ' '))
-        value = table.concat(value, ' ')
+        local alias_key, value_tbl = utils.cons(utils.split_string(link_location, ' '))
+        local value = table.concat(value_tbl, ' ')
 
         local aliases = vim.tbl_extend('force', defaultAliases, module.config.public.aliases)
 
@@ -84,7 +92,7 @@ module.public = {
         link.link_location_text = link.link_location_text:gsub('^!%s*', '')
 
         -- TODO: Support internal link type {! :somefile:}
-        if vim.fn.confirm('Follow link ' .. link.link_location_text .. '?') == 1 then
+        if vim.fn.confirm('Open link ' .. link.link_location_text .. '?') == 1 then
           module.public.follow_link(node, split, link) -- rec
         end
         return
@@ -93,27 +101,6 @@ module.public = {
 
     module.required['core.esupports.hop'].follow_link(node, split, link)
   end,
-}
-
-module.on_event = function(event)
-  local event_name = event.split_type[2]
-  local bufnr = event.buffer
-
-  if event_name == namespace .. '.' .. EVENT_HOP_LINK then
-    local split = event.content[1]
-    local node = module.required['core.esupports.hop'].extract_link_node()
-
-    if node then
-      local link = module.required['core.esupports.hop'].parse_link(node, bufnr)
-      module.public.follow_link(node, split, link)
-    end
-  end
-end
-
-module.events.subscribed = {
-  ['core.keybinds'] = {
-    [namespace .. '.' .. EVENT_HOP_LINK] = true,
-  },
 }
 
 return module

@@ -1,6 +1,7 @@
 # neorg-hop-extras
 Neorg plugin to extend the functionality of links
 
+> NOTE: Includes changes removing neorgs keybindings api
 
 ## Install
 
@@ -36,16 +37,10 @@ require('neorg').setup {
         bind_enter_key = false,
       }
     },
-    ['core.keybinds'] = {
-      config = {
-        hook = function(keybinds)
-          -- Use `external.hop-extras.hop-link` instead of `core.esupports.hop.hop-link`
-          keybinds.remap_event('norg', 'n', '<leader>gl', 'external.hop-extras.hop-link')
-        end,
-      }
-    },
   },
 }
+
+vim.keymap.set('n', '<leader>gl', '<plug>(neorg.external.hop-extras.hop-link)')
 ```
 
 
